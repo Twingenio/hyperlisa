@@ -1,0 +1,11 @@
+# Ambiente virtuale
+venv*/
+
+# File di configurazione dell'IDE
+*.vscode*
+.idea/
+.git
+nul
+*.log
+
+hyperlisa
