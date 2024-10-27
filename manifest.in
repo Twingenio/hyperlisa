@@ -1,2 +1,2 @@
 include README*.md
-include lisa/combine_config.yaml
+include lisa/config.yaml

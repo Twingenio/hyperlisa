@@ -1,8 +1,8 @@
-[English](README.md) | [Italiano](README.it.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Español](README.es.md)
+[English](README.md) | [Italiano](README.it.md)
 
 # Lisa - Analizzatore di Codice per LLM
 
-Lisa (ispirato a Lisa Simpson) è uno strumento progettato per semplificare l'analisi del codice sorgente attraverso i Large Language Models (LLM). Intelligente e analitica come il personaggio da cui prende il nome, Lisa aiuta a studiare e interpretare il codice con logica e metodo.
+Lisa (ispirato a Lisa Simpson) è uno strumento progettato per semplificare l'analisi del codice sorgente attraverso i Large Language Models (LLM). Intelligente e analitica come il personaggio da cui prende il nome, Lisa aiuda a studiare e interpretare il codice con logica e metodo.
 
 ## Descrizione
 
@@ -10,34 +10,98 @@ Lisa è uno strumento essenziale per chi vuole analizzare il proprio codice o st
 
 Questo approccio risolve uno dei problemi più comuni nell'analisi del codice con gli LLM: la frammentazione dei file e la perdita dei riferimenti tra i diversi componenti del progetto.
 
-## Installazione
+## Installazione e Configurazione
 
-Lisa è disponibile come pacchetto Python su PyPI. Per installarlo, esegui:
+### 1. Prerequisiti
+Prima di iniziare, assicurati di avere:
+- Python 3.6 o superiore installato nel tuo sistema
+- Un editor di codice (consigliamo Visual Studio Code, o VSCode)
+- Accesso al terminale (vedremo come usarlo sia da VSCode che dal sistema)
 
+### 2. Installazione del pacchetto
+
+#### Usando Visual Studio Code (Raccomandato per principianti)
+1. Apri VSCode
+2. Apri la cartella del tuo progetto usando `File > Apri Cartella` 
+   (esempio: seleziona `C:\progetti\mio_progetto` su Windows o `/home/utente/progetti/mio_progetto` su Linux/MacOS)
+3. Apri il terminale integrato in VSCode:
+   - Premi `Ctrl + ` (backtick, il tasto sotto Esc)
+   oppure
+   - Dal menu: `Visualizza > Terminale`
+4. Nel terminale vedrai qualcosa di simile a:
+   ```bash
+   # Windows
+   C:\progetti\mio_progetto>
+
+   # Linux/MacOS
+   user@computer:~/progetti/mio_progetto$
+   ```
+5. Esegui il comando di installazione:
+   ```bash
+   pip install hyperlisa
+   ```
+
+#### Usando il Terminale di Sistema
+1. Apri il terminale del tuo sistema operativo:
+   - **Windows**: Cerca "cmd" o "PowerShell" nel menu Start
+   - **MacOS**: Cerca "Terminal" in Spotlight (Cmd + Spazio)
+   - **Linux**: Usa la scorciatoia Ctrl + Alt + T o cerca "Terminal"
+2. Naviga nella cartella del tuo progetto:
+   ```bash
+   # Windows
+   cd C:\progetti\mio_progetto
+
+   # Linux/MacOS
+   cd ~/progetti/mio_progetto
+   ```
+3. Esegui il comando di installazione:
+   ```bash
+   pip install hyperlisa
+   ```
+
+### 3. Configurazione Post-Installazione
+Dopo l'installazione, è **necessario** eseguire il comando di configurazione. 
+
+#### Dal terminale di VSCode o del sistema:
 ```bash
-pip install hyperlisa
+# Il prompt potrebbe apparire così su Windows:
+C:\progetti\mio_progetto> hyperlisa-configure
+
+# O così su Linux/MacOS:
+user@computer:~/progetti/mio_progetto$ hyperlisa-configure
 ```
 
-L'installazione, in automatico, senza che sia necessario un tuo intervento:
-- Crea una cartella `hyperlisa` nel progetto corrente
-- Copia all'interno della cartella un file `config.yaml` personalizzabile
-- Rende disponibili diversi comandi da terminale per l'esecuzione
-- Se presente un file `.gitignore`, aggiunge la cartella `hyperlisa` alle esclusioni
-
-### Comandi disponibili
-Dopo l'installazione, puoi utilizzare uno dei seguenti comandi:
-```bash
-cmb [opzioni]               # Comando breve
-lisacmb [opzioni]          # Comando descrittivo
-hyperlisacmb [opzioni]     # Comando completo
-combine-code [opzioni]      # Comando originale
+Questo comando dovrebbe mostrare una serie di messaggi simili a questi:
+```
+Configurazione di HyperLisa in corso...
+✓ Creazione directory di configurazione
+✓ Generazione file di configurazione predefinito
+✓ Impostazione permessi
+Configurazione completata con successo!
 ```
 
-> **Nota**: La disponibilità di più comandi garantisce che almeno uno sia sempre utilizzabile, anche in presenza di potenziali conflitti con altri alias definiti nel sistema.
+Il comando di configurazione esegue le seguenti operazioni:
+1. Crea la directory di configurazione di Lisa:
+   - Windows: `C:\Users\<username>\AppData\Local\hyperlisa\`
+   - Linux/MacOS: `~/.config/hyperlisa/`
+2. Genera il file di configurazione predefinito `combine_config.yaml` nella directory creata
+3. Imposta i permessi corretti per i file e le directory:
+   - Windows: permessi di lettura e scrittura per l'utente corrente
+   - Linux/MacOS: permessi 755 per le directory e 644 per i file
 
-## Configurazione
+Se esegui il comando e vedi errori relativi ai permessi:
+- **Windows**: Esegui il Prompt dei comandi o PowerShell come amministratore
+- **Linux/MacOS**: Usa `sudo hyperlisa-configure` (ti verrà chiesta la password)
 
-Il pacchetto crea un file `config.yaml` nella cartella `hyperlisa` che permette di personalizzare quali file includere o escludere dall'analisi. La configurazione predefinita è:
+> **IMPORTANTE**: 
+> - Questo comando deve essere eseguito una sola volta dopo l'installazione
+> - Se viene eseguito nuovamente, il comando verificherà prima l'esistenza della configurazione:
+>   - Se trova una configurazione esistente, chiederà conferma prima di sovrascriverla
+>   - In caso di sovrascrittura, le personalizzazioni precedenti andranno perse
+>   - Se si desidera mantenere le personalizzazioni, fare una copia di backup del file `combine_config.yaml` prima di rieseguire il comando
+
+### 4. File di Configurazione
+Il file `combine_config.yaml` permette di personalizzare quali file includere o escludere dall'analisi. La configurazione predefinita è:
 
 ```yaml
 # Pattern di inclusione (estensioni o directory da includere)
@@ -56,19 +120,18 @@ excludes:
   - "log"
 ```
 
-### Pattern di Inclusione/Esclusione
+#### Pattern di Inclusione/Esclusione
 - I pattern in `includes` determinano quali file verranno processati (es: "*.py" include tutti i file Python)
 - I pattern in `excludes` specificano quali file o directory ignorare
 - È possibile utilizzare il carattere * come carattere jolly
 - I pattern vengono applicati sia ai nomi dei file che ai percorsi delle directory
 - **Importante**: Le regole di esclusione hanno sempre la priorità su quelle di inclusione
 
-### Priorità delle Regole
-Quando ci sono "conflitti" tra regole di inclusione e di esclusione, quelle di esclusione hanno sempre la precedenza. Ecco alcuni esempi:
-
+#### Esempi di Pattern
 ```
 Esempio 1:
-/goofy
+C:\progetti\mio_progetto    # Windows
+/progetti/mio_progetto      # Linux/MacOS
     /src_code
         /utils
             /logs
@@ -84,7 +147,8 @@ In questo caso, `file1.py` e `file2.py` NON verranno inclusi nonostante abbiano 
 
 ```
 Esempio 2:
-/goofy
+C:\progetti\mio_progetto    # Windows
+/progetti/mio_progetto      # Linux/MacOS
     /includes_dir
         /excluded_subdir
             important.py
@@ -97,65 +161,67 @@ In questo caso, `important.py` NON verrà incluso perché si trova in una direct
 
 ## Utilizzo
 
-Dopo l'installazione, puoi eseguire Lisa usando uno dei comandi disponibili:
+Il programma può essere eseguito utilizzando uno dei seguenti comandi dal terminale:
 
 ```bash
-cmb [opzioni]
+# Windows
+C:\progetti\mio_progetto> cmb [opzioni]
+
+# Linux/MacOS
+user@computer:~/progetti/mio_progetto$ cmb [opzioni]
 ```
+
+Sono disponibili anche comandi alternativi:
+- `combine-code`: comando originale completo
+- `lisacmb`: alias descrittivo
+- `hyperlisacmb`: alias ancora più descrittivo
 
 ### Struttura e Nome Predefinito
 Per comprendere quale nome file verrà utilizzato di default, consideriamo questa struttura:
 
 ```
+# Windows
+C:\progetti
+    \mio_progetto_test     <- Questa è la directory root
+        \src
+            main.py
+        \tests
+            test_main.py
+
+# Linux/MacOS
 /home/user/progetti
-    /goofy     <- Questa è la directory root
-        /hyperlisa
-            config.yaml
-            GOOFY_20240325_1423.txt
-            GOOFY_20240326_0930.txt
+    /mio_progetto_test     <- Questa è la directory root
         /src
             main.py
         /tests
             test_main.py
 ```
 
-In questo caso, il nome predefinito sarà "GOOFY" (il nome della directory root in maiuscolo).
+In questo caso, il nome predefinito sarà "MIO_PROGETTO_TEST" (il nome della directory root in maiuscolo).
 
 ### Parametri disponibili:
 
-- `--clean`: Rimuove tutti i file di testo precedentemente generati
+- `--clean`: Rimuove i file di testo precedentemente generati
 - `--output NOME`: Specifica il prefisso del nome del file di output
   ```bash
-  # Esempio con nome predefinito (dalla struttura sopra)
-  cmb
-  # Output: GOOFY_20240327_1423.txt
+  # Windows
+  # Esempio con nome predefinito
+  C:\progetti\mio_progetto> cmb
+  # Output: MIO_PROGETTO_20240327_1423.txt
 
   # Esempio con nome personalizzato
-  cmb --output ANALISI_GOOFY
-  # Output: ANALISI_GOOFY_20240327_1423.txt
+  C:\progetti\mio_progetto> cmb --output ANALISI_PROGETTO
+  # Output: ANALISI_PROGETTO_20240327_1423.txt
+
+  # Linux/MacOS
+  # Esempio con nome predefinito
+  user@computer:~/progetti/mio_progetto$ cmb
+  # Output: MIO_PROGETTO_20240327_1423.txt
+
+  # Esempio con nome personalizzato
+  user@computer:~/progetti/mio_progetto$ cmb --output ANALISI_PROGETTO
+  # Output: ANALISI_PROGETTO_20240327_1423.txt
   ```
-
-#### Esempio di utilizzo di --clean
-
-Supponiamo di avere questa situazione iniziale:
-```
-/goofy
-    /hyperlisa
-        config.yaml
-        GOOFY_20240325_1423.txt
-        GOOFY_20240326_0930.txt
-        GOOFY_20240326_1645.txt
-```
-
-Dopo l'esecuzione di `cmb --clean`:
-```
-/goofy
-    /hyperlisa
-        config.yaml
-        GOOFY_20240327_1430.txt    # Nuovo file generato
-```
-
-Il comando `--clean` rimuove tutti i file .txt precedenti che iniziano con lo stesso prefisso prima di generare il nuovo file. Questo è utile quando si vuole mantenere solo l'ultima versione dell'analisi.
 
 ### Output
 
@@ -172,39 +238,41 @@ Per utilizzare Lisa con un progetto GitHub, segui questi passaggi:
 
 1. **Preparazione dell'ambiente**:
    ```bash
-   # Crea e accedi a una directory per i tuoi progetti
-   mkdir ~/progetti
-   cd ~/progetti
+   # Windows
+   C:> mkdir C:\progetti
+   C:> cd C:\progetti
+
+   # Linux/MacOS
+   $ mkdir ~/progetti
+   $ cd ~/progetti
    ```
 
 2. **Clona il progetto da analizzare**:
    ```bash
-   # Esempio con un progetto ipotetico "goofy"
-   git clone goofy.git
-   cd goofy
+   # Esempio con un progetto ipotetico "moon_project"
+   # Windows/Linux/MacOS
+   git clone https://github.com/utente/moon_project.git
    ```
 
-3. **Installa Lisa**:
+3. **Installa e configura Lisa**:
    ```bash
+   # Windows/Linux/MacOS
    pip install hyperlisa
+   hyperlisa-configure
    ```
 
-4. **Personalizza la configurazione** (opzionale):
+4. **Esegui l'analisi**:
    ```bash
-   # Il file config.yaml si trova nella cartella hyperlisa
-   # Modifica le regole di inclusione/esclusione secondo necessità
-   ```
+   # Windows
+   C:\progetti\moon_project> cmb
 
-5. **Esegui l'analisi**:
-   ```bash
-   cmb
+   # Linux/MacOS
+   user@computer:~/progetti/moon_project$ cmb
    ```
-
-> **Nota**: Durante l'installazione, Lisa controlla automaticamente la presenza del file .gitignore e, se presente, aggiunge la cartella 'hyperlisa' alle esclusioni. Questo assicura che i file generati non vengano accidentalmente inclusi nel repository.
 
 ### Migliori Pratiche per l'Analisi
 - Prima di eseguire Lisa, assicurati di essere nella directory root del progetto da analizzare
-- Controlla e personalizza il file `config.yaml` in base alle specifiche necessità del progetto
+- Controlla e personalizza il file `combine_config.yaml` in base alle specifiche necessità del progetto
 - Utilizza l'opzione `--clean` per mantenere ordinata la directory quando generi multiple versioni
 
 ## Note Aggiuntive
@@ -212,7 +280,81 @@ Per utilizzare Lisa con un progetto GitHub, segui questi passaggi:
 - Lisa mantiene la struttura gerarchica dei file nel documento generato
 - Ogni file viene chiaramente delimitato da separatori che ne indicano il percorso relativo
 - Il codice viene organizzato mantenendo l'ordine di profondità delle directory
-- I file generati vengono salvati nella cartella `hyperlisa` e possono essere facilmente condivisi con gli LLM per l'analisi
+- I file generati possono essere facilmente condivisi con gli LLM per l'analisi
+
+## Utilizzare il File Generato con gli LLM
+
+Lisa genera un file che può essere utilizzato efficacemente con vari Large Language Models. Ecco un esempio pratico di come sfruttare al meglio questo strumento.
+
+### Esempio: Analisi di LangChain
+Supponiamo di voler utilizzare la libreria LangChain ma di non avere familiarità con la sua struttura o le sue funzionalità più recenti.
+
+1. **Preparazione**:
+   ```bash
+   # Clona LangChain
+   git clone https://github.com/langchain-ai/langchain.git
+   cd langchain
+
+   # Genera il file di analisi con Lisa
+   cmb --output LANGCHAIN_ANALYSIS
+   ```
+
+2. **Utilizzo con ChatGPT/Claude**:
+   Carica il file generato `LANGCHAIN_ANALYSIS_20240327_1423.txt` nella chat. Puoi utilizzare prompt come questi:
+
+   ```
+   Ho generato un'analisi del codice sorgente di LangChain usando Lisa. 
+   Il file contiene la struttura completa del codice con tutti i riferimenti.
+   Per favore:
+   1. Analizza la struttura del codice
+   2. Identifica i moduli principali
+   3. Suggerisci il modo migliore per implementare [descrivi il tuo caso d'uso]
+   ```
+
+   Esempi specifici di prompt:
+
+   **Per esplorare funzionalità recenti**:
+   ```
+   Nel codice che ti ho fornito, cerca le implementazioni più recenti 
+   per l'integrazione con modelli di OpenAI. Vorrei creare una catena 
+   che utilizza GPT-4 per analizzare documenti PDF, estraendo 
+   informazioni chiave e generando un sommario. Puoi mostrarmi il 
+   codice necessario utilizzando le ultime API disponibili?
+   ```
+
+   **Per comprendere parti specifiche**:
+   ```
+   Analizza come LangChain implementa la gestione della memoria nelle 
+   conversazioni. Voglio creare un chatbot che mantiene il contesto 
+   delle conversazioni precedenti ma ottimizza l'utilizzo dei token. 
+   Puoi spiegarmi come funziona e fornirmi un esempio di 
+   implementazione basato sul codice attuale?
+   ```
+
+   **Per progetti personalizzati**:
+   ```
+   Basandoti sul codice sorgente fornito, aiutami a creare un agente 
+   personalizzato che:
+   1. Accede a un database SQL
+   2. Elabora query in linguaggio naturale
+   3. Genera e esegue query SQL appropriate
+   4. Formatta i risultati in modo user-friendly
+   Mostrami il codice necessario utilizzando i componenti più adatti 
+   di LangChain.
+   ```
+
+### Vantaggi di Questo Approccio
+- **Accesso alle Ultime Funzionalità**: L'LLM può vedere il codice più recente, anche se non ancora documentato
+- **Comprensione Profonda**: Avendo accesso al codice sorgente completo, l'LLM può fornire suggerimenti più precisi e contestualizzati
+- **Debugging Efficace**: Se incontri problemi, puoi chiedere all'LLM di analizzare le implementazioni specifiche
+- **Personalizzazione Informata**: Puoi creare soluzioni personalizzate basate sulle effettive implementazioni interne
+
+### Suggerimenti per l'Uso Efficace
+1. **Sii Specifico**: Descrivi chiaramente il tuo caso d'uso e le funzionalità desiderate
+2. **Chiedi Spiegazioni**: Se qualcosa non è chiaro, fai domande sul funzionamento interno
+3. **Itera**: Usa le risposte dell'LLM per raffinare le tue domande e ottenere soluzioni migliori
+4. **Verifica**: Testa sempre il codice generato e chiedi chiarimenti se necessario
+5. **Esplora Alternative**: Chiedi all'LLM di suggerirti approcci diversi basati sul codice sorgente
 
 ## Contribuire
 

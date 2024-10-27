@@ -1,8 +1,8 @@
-[English](README.md) | [Italiano](README.it.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Español](README.es.md)
+[English](README.md) | [Italiano](README.it.md)
 
 # Lisa - Code Analyzer for LLMs
 
-Lisa (inspired by Lisa Simpson) is a tool designed to simplify source code analysis through Large Language Models (LLMs). Intelligent and analytical like the character it's named after, Lisa helps study and interpret code with logic and method.
+Lisa (inspired by Lisa Simpson) is a tool designed to simplify source code analysis through Large Language Models (LLMs). Intelligent and analytical like the character it's named after, Lisa helps to study and interpret code with logic and method.
 
 ## Description
 
@@ -10,9 +10,98 @@ Lisa is an essential tool for those who want to analyze their code or study open
 
 This approach solves one of the most common problems in code analysis with LLMs: file fragmentation and loss of references between different project components.
 
-## Configuration
+## Installation and Configuration
 
-The project uses a `combine_config.yaml` configuration file that allows you to customize which files to include or exclude from the analysis. The default configuration is:
+### 1. Prerequisites
+Before starting, make sure you have:
+- Python 3.6 or higher installed on your system
+- A code editor (we recommend Visual Studio Code, or VSCode)
+- Access to the terminal (we'll see how to use it both from VSCode and from the system)
+
+### 2. Package Installation
+
+#### Using Visual Studio Code (Recommended for beginners)
+1. Open VSCode
+2. Open your project folder using `File > Open Folder`
+   (example: select `C:\projects\my_project` on Windows or `/home/user/projects/my_project` on Linux/MacOS)
+3. Open the integrated terminal in VSCode:
+   - Press `Ctrl + ` (backtick, the key under Esc)
+   or
+   - From the menu: `View > Terminal`
+4. In the terminal you'll see something like:
+   ```bash
+   # Windows
+   C:\projects\my_project>
+
+   # Linux/MacOS
+   user@computer:~/projects/my_project$
+   ```
+5. Run the installation command:
+   ```bash
+   pip install hyperlisa
+   ```
+
+#### Using the System Terminal
+1. Open your system's terminal:
+   - **Windows**: Search for "cmd" or "PowerShell" in the Start menu
+   - **MacOS**: Search for "Terminal" in Spotlight (Cmd + Space)
+   - **Linux**: Use the shortcut Ctrl + Alt + T or search for "Terminal"
+2. Navigate to your project folder:
+   ```bash
+   # Windows
+   cd C:\projects\my_project
+
+   # Linux/MacOS
+   cd ~/projects/my_project
+   ```
+3. Run the installation command:
+   ```bash
+   pip install hyperlisa
+   ```
+
+### 3. Post-Installation Configuration
+After installation, you **must** run the configuration command.
+
+#### From VSCode or system terminal:
+```bash
+# The prompt might look like this on Windows:
+C:\projects\my_project> hyperlisa-configure
+
+# Or like this on Linux/MacOS:
+user@computer:~/projects/my_project$ hyperlisa-configure
+```
+
+This command should show a series of messages like these:
+```
+Configuring HyperLisa...
+✓ Creating configuration directory
+✓ Generating default configuration file
+✓ Setting permissions
+Configuration completed successfully!
+```
+
+The configuration command performs the following operations:
+1. Creates Lisa's configuration directory:
+   - Windows: `C:\Users\<username>\AppData\Local\hyperlisa\`
+   - Linux/MacOS: `~/.config/hyperlisa/`
+2. Generates the default configuration file `combine_config.yaml` in the created directory
+3. Sets the correct permissions for files and directories:
+   - Windows: read and write permissions for the current user
+   - Linux/MacOS: 755 permissions for directories and 644 for files
+
+If you run the command and see permission-related errors:
+- **Windows**: Run Command Prompt or PowerShell as administrator
+- **Linux/MacOS**: Use `sudo hyperlisa-configure` (you'll be asked for your password)
+
+> **IMPORTANT**: 
+> - This command should be run only once after installation
+> - If run again, the command will first check for existing configuration:
+>   - If it finds existing configuration, it will ask for confirmation before overwriting
+>   - In case of overwrite, previous customizations will be lost
+>   - If you want to keep customizations, make a backup copy of the `combine_config.yaml` file before running the command again
+
+### 4. Configuration File
+The `combine_config.yaml` file allows you to customize which files to include or exclude from the analysis. The default configuration is:
 
 ```yaml
 # Inclusion patterns (extensions or directories to include)
@@ -31,19 +120,18 @@ excludes:
   - "log"
 ```
 
-### Inclusion/Exclusion Patterns
+#### Inclusion/Exclusion Patterns
 - Patterns in `includes` determine which files will be processed (e.g., "*.py" includes all Python files)
 - Patterns in `excludes` specify which files or directories to ignore
 - You can use the * character as a wildcard
 - Patterns are applied to both file names and directory paths
 - **Important**: Exclusion rules always take priority over inclusion rules
 
-### Rule Priority
-When there are "conflicts" between inclusion and exclusion rules, exclusion rules always take precedence. Here are some examples:
-
+#### Pattern Examples
 ```
 Example 1:
-/project_root
+C:\projects\my_project    # Windows
+/projects/my_project      # Linux/MacOS
     /src_code
         /utils
             /logs
@@ -59,7 +147,8 @@ In this case, `file1.py` and `file2.py` will NOT be included despite having the 
 
 ```
 Example 2:
-/project_root
+C:\projects\my_project    # Windows
+/projects/my_project      # Linux/MacOS
     /includes_dir
         /excluded_subdir
             important.py
@@ -72,23 +161,36 @@ In this case, `important.py` will NOT be included because it's in a directory th
 
 ## Usage
 
-The script is run from the command line with:
+The program can be run using one of the following commands from the terminal:
 
 ```bash
-cmb [options]
+# Windows
+C:\projects\my_project> cmb [options]
+
+# Linux/MacOS
+user@computer:~/projects/my_project$ cmb [options]
 ```
 
-> **Note**: The leading underscore in the filename is intentional and allows for shell tab completion.
+Alternative commands are also available:
+- `combine-code`: complete original command
+- `lisacmb`: descriptive alias
+- `hyperlisacmb`: even more descriptive alias
 
 ### Default Structure and Name
 To understand which filename will be used by default, consider this structure:
 
 ```
+# Windows
+C:\projects
+    \my_test_project     <- This is the root directory
+        \src
+            main.py
+        \tests
+            test_main.py
+
+# Linux/MacOS
 /home/user/projects
     /my_test_project     <- This is the root directory
-        /scripts
-            _combine_code.py
-            combine_config.yaml
         /src
             main.py
         /tests
@@ -102,12 +204,22 @@ In this case, the default name will be "MY_TEST_PROJECT" (the root directory nam
 - `--clean`: Removes previously generated text files
 - `--output NAME`: Specifies the output file name prefix
   ```bash
-  # Example with default name (from structure above)
-  python \scripts\_combine_code.py
-  # Output: MY_TEST_PROJECT_20240327_1423.txt
+  # Windows
+  # Example with default name
+  C:\projects\my_project> cmb
+  # Output: MY_PROJECT_20240327_1423.txt
 
   # Example with custom name
-  python \scripts\_combine_code.py --output PROJECT_ANALYSIS
+  C:\projects\my_project> cmb --output PROJECT_ANALYSIS
+  # Output: PROJECT_ANALYSIS_20240327_1423.txt
+
+  # Linux/MacOS
+  # Example with default name
+  user@computer:~/projects/my_project$ cmb
+  # Output: MY_PROJECT_20240327_1423.txt
+
+  # Example with custom name
+  user@computer:~/projects/my_project$ cmb --output PROJECT_ANALYSIS
   # Output: PROJECT_ANALYSIS_20240327_1423.txt
   ```
 
@@ -126,31 +238,36 @@ To use Lisa with a GitHub project, follow these steps:
 
 1. **Environment preparation**:
    ```bash
-   # Create and access a directory for your projects
-   mkdir ~/projects
-   cd ~/projects
+   # Windows
+   C:> mkdir C:\projects
+   C:> cd C:\projects
+
+   # Linux/MacOS
+   $ mkdir ~/projects
+   $ cd ~/projects
    ```
 
 2. **Clone the project to analyze**:
    ```bash
    # Example with a hypothetical "moon_project"
-   git clone moon_project.git
+   # Windows/Linux/MacOS
+   git clone https://github.com/user/moon_project.git
    ```
 
-3. **Integrate Lisa into the project**:
+3. **Install and configure Lisa**:
    ```bash
-   # Clone Lisa's repository
-   git clone https://github.com/yourname/lisa.git
-
-   # Copy Lisa's scripts folder into moon_project
-   cp -r lisa/scripts moon_project/
-   cp lisa/scripts/combine_config.yaml moon_project/scripts/
+   # Windows/Linux/MacOS
+   pip install hyperlisa
+   hyperlisa-configure
    ```
 
 4. **Run the analysis**:
    ```bash
-   cd moon_project
-   python scripts/_combine_code.py
+   # Windows
+   C:\projects\moon_project> cmb
+
+   # Linux/MacOS
+   user@computer:~/projects/moon_project$ cmb
    ```
 
 ### Best Practices for Analysis
@@ -164,6 +281,78 @@ To use Lisa with a GitHub project, follow these steps:
 - Each file is clearly delimited by separators indicating its relative path
 - Code is organized maintaining directory depth order
 - Generated files can be easily shared with LLMs for analysis
+
+## Using the Generated File with LLMs
+
+Lisa generates a file that can be effectively used with various Large Language Models. Here's a practical example of how to make the most of this tool.
+
+### Example: Analyzing LangChain
+Let's say we want to use the LangChain library but aren't familiar with its structure or its most recent features.
+
+1. **Preparation**:
+   ```bash
+   # Clone LangChain
+   git clone https://github.com/langchain-ai/langchain.git
+   cd langchain
+
+   # Generate the analysis file with Lisa
+   cmb --output LANGCHAIN_ANALYSIS
+   ```
+
+2. **Using with ChatGPT/Claude**:
+   Upload the generated file `LANGCHAIN_ANALYSIS_20240327_1423.txt` to the chat. You can use prompts like these:
+
+   ```
+   I've generated a source code analysis of LangChain using Lisa.
+   The file contains the complete code structure with all references.
+   Please:
+   1. Analyze the code structure
+   2. Identify the main modules
+   3. Suggest the best way to implement [describe your use case]
+   ```
+
+   Specific prompt examples:
+
+   **To explore recent features**:
+   ```
+   In the code I've provided, look for the most recent implementations
+   for OpenAI model integration. I want to create a chain that uses 
+   GPT-4 to analyze PDF documents, extracting key information and 
+   generating a summary. Can you show me the necessary code using 
+   the latest available APIs?
+   ```
+
+   **To understand specific parts**:
+   ```
+   Analyze how LangChain implements memory management in conversations. 
+   I want to create a chatbot that maintains context from previous 
+   conversations but optimizes token usage. Can you explain how it 
+   works and provide an implementation example based on the current code?
+   ```
+
+   **For custom projects**:
+   ```
+   Based on the provided source code, help me create a custom agent that:
+   1. Accesses a SQL database
+   2. Processes natural language queries
+   3. Generates and executes appropriate SQL queries
+   4. Formats results in a user-friendly way
+   Show me the necessary code using the most suitable LangChain 
+   components.
+   ```
+
+### Advantages of This Approach
+- **Access to Latest Features**: The LLM can see the most recent code, even if not yet documented
+- **Deep Understanding**: Having access to the complete source code, the LLM can provide more accurate and contextualized suggestions
+- **Effective Debugging**: If you encounter issues, you can ask the LLM to analyze specific implementations
+- **Informed Customization**: You can create custom solutions based on actual internal implementations
+
+### Tips for Effective Use
+1. **Be Specific**: Clearly describe your use case and desired functionality
+2. **Ask for Explanations**: If something isn't clear, ask questions about internal workings
+3. **Iterate**: Use the LLM's responses to refine your questions and get better solutions
+4. **Verify**: Always test generated code and ask for clarification if needed
+5. **Explore Alternatives**: Ask the LLM to suggest different approaches based on the source code
 
 ## Contributing
 

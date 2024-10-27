@@ -1,7 +1,4 @@
 MANIFEST.in
-README.de.md
-README.es.md
-README.fr.md
 README.it.md
 README.md
 setup.py
@@ -12,3 +9,5 @@ hyperlisa.egg-info/entry_points.txt
 hyperlisa.egg-info/top_level.txt
 lisa/__init__.py
 lisa/_combine_code.py
+lisa/config.yaml
+lisa/configure.py
