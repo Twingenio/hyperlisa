@@ -3,6 +3,37 @@ import sys
 import glob
 from datetime import datetime
 import fnmatch
+import logging
+
+logger: logging.Logger = None
+
+
+def setup_logging(log_level_str="INFO"):
+    """
+    Setup logging configuration
+    """
+    # Mapping delle stringhe di log level ai livelli effettivi
+    log_levels = {
+        "DEBUG": logging.DEBUG,
+        "INFO": logging.INFO,
+        "WARNING": logging.WARNING,
+        "ERROR": logging.ERROR,
+        "CRITICAL": logging.CRITICAL,
+    }
+
+    # Converti la stringa del level in uppercase e prendi il livello corrispondente
+    # defaulta a INFO se il level non è valido
+    log_level = log_levels.get(log_level_str.upper(), logging.INFO)
+
+    # Configura il logging
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    logger = logging.getLogger(__name__)
+    return logger
 
 
 def get_hyperlisa_dir():
@@ -20,6 +51,8 @@ def matches_pattern(path, patterns):
     """
     Determine if a path matches any pattern in a given list
     """
+    global logger
+    logger.debug(f"Checking path: {path} against patterns: {patterns}")
     return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
 
 
@@ -27,6 +60,8 @@ def get_files_by_depth(repo_dir, includes, excludes):
     """
     Retrieve files, filtering based on include and exclude patterns
     """
+    global logger
+    logger.debug(f"Searching files in directory: {repo_dir}")
     files_by_depth = []
     for root, dirs, files in os.walk(repo_dir):
         # Apply excludes to directories and files
@@ -65,6 +100,7 @@ def remove_old_combined_files(hyperlisa_dir, output_name):
 
 
 def main():
+    global logger
     print("File generation started")
 
     # Get hyperlisa directory
@@ -98,13 +134,16 @@ def main():
     try:
         with open(config_path, "r") as f:
             current_section = None
+            log_level = "INFO"  # default
             for line in f:
                 line = line.strip()
                 # Ignore comments and empty lines
                 if not line or line.startswith("#"):
                     continue
-                # Determine the current section (includes or excludes)
-                if line.lower() == "includes:":
+
+                if line.startswith("log_level:"):
+                    log_level = line.split(":")[1].strip()
+                elif line.lower() == "includes:":
                     current_section = "includes"
                     continue
                 elif line.lower() == "excludes:":
@@ -120,6 +159,14 @@ def main():
                         includes.append(item)
                     elif current_section == "excludes":
                         excludes.append(item)
+
+        # Setup logging with configured level
+        logger = setup_logging(log_level)
+
+        logger.debug("Configuration loaded:")
+        logger.debug(f"Log level: {log_level}")
+        logger.debug(f"Include patterns: {includes}")
+        logger.debug(f"Exclude patterns: {excludes}")
 
     except FileNotFoundError:
         print(f"Configuration file not found at {config_path}")

@@ -1,12 +1,10 @@
-# combine_config.yaml
+log_level: WARNING
 
-# Include patterns (extensions or directories to include)
 includes:
   - "*.py"  
   - "*.md"
-  # Additional directories or extensions can be added here
+# add here others includes
 
-# Exclude patterns (directories or files to exclude)
 excludes:
   - ".git"
   - "__pycache__"
@@ -16,3 +14,4 @@ excludes:
   - "agents*"
   - "log"
   - "scripts"
+# add here others excludes
