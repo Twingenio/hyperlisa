@@ -4,6 +4,43 @@
 
 Lisa (ispirato a Lisa Simpson) è uno strumento progettato per semplificare l'analisi del codice sorgente attraverso i Large Language Models (LLM). Intelligente e analitica come il personaggio da cui prende il nome, Lisa aiuda a studiare e interpretare il codice con logica e metodo.
 
+## Lisa in breve
+
+Ecco i passaggi essenziali per iniziare subito:
+
+1. **Installazione**:
+   ```bash
+   pip install hyperlisa
+   ```
+
+2. **Configurazione**:
+   ```bash
+   hyperlisa-configure
+   ```
+
+3. **[Opzionale] Personalizzazione**:
+   Modifica il file di configurazione:
+   - Windows: `C:\Users\<username>\AppData\Local\hyperlisa\combine_config.yaml`
+   - Linux/MacOS: `~/.config/hyperlisa/combine_config.yaml`
+   ```yaml
+   includes:
+     - "*.py"    # aggiungi altre estensioni se necessario
+     - "*.java"
+   excludes:
+     - ".git"
+     - "venv"
+   ```
+
+4. **Uso**:
+   ```bash
+   # Dalla directory del progetto
+   cmb                            # nome file predefinito
+   # oppure
+   cmb --output NOME_ANALISI     # nome file personalizzato
+   ```
+
+Il file generato sarà nella directory corrente con formato: `NOME_YYYYMMDD_HHMM.txt`
+
 ## Descrizione
 
 Lisa è uno strumento essenziale per chi vuole analizzare il proprio codice o studiare progetti open source attraverso i Large Language Models. Il suo principale obiettivo è generare un unico file di testo che mantiene tutti i riferimenti e la struttura del codice originale, rendendolo facilmente interpretabile da un LLM.
