@@ -113,9 +113,9 @@ def main():
 
                 # Parse list items (assumes each item starts with "- ")
                 if line.strip().startswith("- "):
-                    item = line[
-                        2:
-                    ].strip()  # Remove "- " and any surrounding whitespace
+                    item = (
+                        line[2:].strip().strip('"')
+                    )  # Remove "- ", quotes and any surrounding whitespaceng whitespace
                     if current_section == "includes":
                         includes.append(item)
                     elif current_section == "excludes":

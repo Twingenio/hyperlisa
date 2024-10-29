@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="hyperlisa",
-    version="1.0.4",
+    version="1.0.5",
     description="A package for combining source code files into one",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
