@@ -112,7 +112,7 @@ def main():
                     continue
 
                 # Parse list items (assumes each item starts with "- ")
-                if line.startswith("- "):
+                if line.strip().startswith("- "):
                     item = line[
                         2:
                     ].strip()  # Remove "- " and any surrounding whitespace
