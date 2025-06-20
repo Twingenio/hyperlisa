@@ -29,7 +29,7 @@ Questa sezione contiene le istruzioni essenziali per essere operativi in pochi m
 1.  **Aggiornamento**: Per prima cosa, aggiorna il pacchetto all'ultima versione:
 
     ```bash
-    pip install --upgrade hyperlisa
+    python.exe -m pip install --upgrade hyperlisa
     ```
 
 2.  **Migrazione**: Spostati nella cartella del tuo progetto e lancia il comando di migrazione automatica:

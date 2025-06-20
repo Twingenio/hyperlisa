@@ -29,7 +29,7 @@ This section contains the essential instructions to get up and running in a few 
 1.  **Update**: First, update the package to the latest version:
 
     ```bash
-    pip install --upgrade hyperlisa
+    python.exe -m pip install --upgrade hyperlisa
     ```
 
 2.  **Migration**: Move to your project folder and run the automatic migration command:
