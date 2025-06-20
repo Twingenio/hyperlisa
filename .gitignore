@@ -10,3 +10,5 @@ nul
 
 hyperlisa
 update_pypi.readme.txt
+# Hyperlisa configuration
+.hyperlisa/

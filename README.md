@@ -1,424 +1,382 @@
-[English](README.md) | [Italiano](README.it.md)
+[English](README.md) | [Italiano](https://www.google.com/search?q=README.it.md)
 
 # Lisa - Code Analyzer for LLMs
 
-Lisa (inspired by Lisa Simpson) is a tool designed to simplify source code analysis through Large Language Models (LLMs). Intelligent and analytical like the character it's named after, Lisa helps to study and interpret code with logic and method.
+Lisa (inspired by Lisa Simpson) is a tool designed to simplify the analysis of source code through Large Language Models (LLMs). Intelligent and analytical like the character she is named after, Lisa helps to study and interpret code with logic and method.
 
-## Lisa in a Nutshell
+## Quick Guide
 
-Here are the essential steps to get started quickly:
+This section contains the essential instructions to get up and running in a few minutes, whether starting from scratch or updating an existing project.
 
-1. **Installation**:
-   ```bash
-   pip install hyperlisa
-   ```
+### For a New Project
 
-2. **Configuration**:
-   ```bash
-   hyperlisa-configure
-   ```
+1.  **Installation**: Open the terminal in your project folder and run the command:
 
-3. **[Optional] Customization**:
-   Edit the configuration file:
-   - Windows: `C:\Users\<username>\AppData\Local\hyperlisa\combine_config.yaml`
-   - Linux/MacOS: `~/.config/hyperlisa/combine_config.yaml`
-   ```yaml
-   includes:
-     - "*.py"    # add other extensions if needed
-     - "*.java"
-   excludes:
-     - ".git"
-     - "venv"
-   ```
+    ```bash
+    pip install hyperlisa
+    ```
 
-4. **Usage**:
-   ```bash
-   # From the project directory
-   cmb                            # default filename
-   # or
-   cmb --output ANALYSIS_NAME     # custom filename
-   ```
+2.  **Configuration**: Run the command to create the default configuration.
 
-The generated file will be in the current directory with format: `NAME_YYYYMMDD_HHMM.txt`
+    ```bash
+    hyperlisa-configure
+    ```
 
-## Description
+    A `.hyperlisa` folder will be created with a `config.yaml` file inside.
 
-Lisa is an essential tool for those who want to analyze their code or study open source projects through Large Language Models. Its main objective is to generate a single text file that maintains all references and structure of the original code, making it easily interpretable by an LLM.
+## 1\. To Update an Existing Project (from v1.x)
 
-This approach solves one of the most common problems in code analysis with LLMs: file fragmentation and loss of references between different project components.
+1.  **Update**: First, update the package to the latest version:
 
-## Installation and Configuration
+    ```bash
+    pip install --upgrade hyperlisa
+    ```
 
-### 1. Prerequisites
-Before starting, make sure you have:
-- Python 3.6 or higher installed on your system
-- A code editor (we recommend Visual Studio Code, or VSCode)
-- Access to the terminal (we'll see how to use it both from VSCode and from the system)
+2.  **Migration**: Move to your project folder and run the automatic migration command:
 
-### 2. Package Installation
+    ```bash
+    hyperlisa-migrate
+    ```
 
-#### Using Visual Studio Code (Recommended for beginners)
-1. Open VSCode
-2. Open your project folder using `File > Open Folder`
-   (example: select `C:\projects\my_project` on Windows or `/home/user/projects/my_project` on Linux/MacOS)
-3. Open the integrated terminal in VSCode:
-   - Press `Ctrl + ` (backtick, the key under Esc)
-   or
-   - From the menu: `View > Terminal`
-4. In the terminal you'll see something like:
-   ```bash
-   # Windows
-   C:\projects\my_project>
+    This command will rename the old `hyperlisa` folder to `.hyperlisa` and convert your old configuration file to the new format.
 
-   # Linux/MacOS
-   user@computer:~/projects/my_project$
-   ```
-5. Run the installation command:
-   ```bash
-   pip install hyperlisa
-   ```
+## 2\. Basic Usage
 
-#### Using the System Terminal
-1. Open your system's terminal:
-   - **Windows**: Search for "cmd" or "PowerShell" in the Start menu
-   - **MacOS**: Search for "Terminal" in Spotlight (Cmd + Space)
-   - **Linux**: Use the shortcut Ctrl + Alt + T or search for "Terminal"
-2. Navigate to your project folder:
-   ```bash
-   # Windows
-   cd C:\projects\my_project
+### 2.1. **Execution**: From the project folder, simply run:
 
-   # Linux/MacOS
-   cd ~/projects/my_project
-   ```
-3. Run the installation command:
-   ```bash
-   pip install hyperlisa
-   ```
-
-### 3. Post-Installation Configuration
-After installation, you **must** run the configuration command.
-
-#### From VSCode or system terminal:
+````
 ```bash
-# The prompt might look like this on Windows:
-C:\projects\my_project> hyperlisa-configure
+cmb
+```
+````
 
-# Or like this on Linux/MacOS:
-user@computer:~/projects/my_project$ hyperlisa-configure
+### 2.2. **Output**: The script will generate, inside the `.hyperlisa` folder, a text file for each profile enabled in your `config.yaml`. By default, each file will begin with the **tree structure** of the analyzed project, to immediately provide an architectural context. The filenames will be constructed according to the template defined in the configuration.
+
+## 3\. Description: Full Control of the Context
+
+AI assistants integrated into our editors, like GitHub Copilot, have become incredibly powerful "autopilots" for development. They analyze our code in real-time and, with great effectiveness, decide which context to retrieve from the project to answer our questions. They are designed to be fast, convenient, and to minimize manual intervention.
+
+Hyperlisa stems from a different and complementary philosophy, based not on automation, but on **deliberate control by the developer**. It does not aim to replace these tools, but to offer a control console for all those cases where it is the programmer, and not the assistant, who wants to set the rules of the game.
+
+The advantage of Lisa can be summarized in one word: **control**.
+
+### 3.1. Control over *What* to Share
+
+While an inline assistant uses heuristics to decide which code snippets to send to the model, Lisa gives you the power to create an analysis "dossier" with surgical precision.
+
+  * **Targeted Focus**: Instead of making the AI search for a needle in a haystack, you give it only the needles it needs. Have a bug in the interface? Create a profile that includes only the UI components and their related styles. Are you optimizing a query? Provide only the models and the data-access layer. This reduces noise and allows the LLM to focus on the specific problem with absolute clarity.
+
+  * **Guaranteed Privacy and Security**: With Lisa's profiles, you can explicitly and guaranteedly exclude any file or folder containing secrets, sensitive data, or proprietary algorithms. You have mathematical certainty about what you are sending to the model, without having to rely on the sometimes opaque exclusion policies of a third-party tool.
+
+  * **Deterministic Context**: The input you provide to the LLM is not a dynamic and potentially variable construct assembled by an algorithm, but a stable and reproducible artifact. You know exactly what the model is "seeing" at all times.
+
+### 3.2. Control over the Working *Session*
+
+This is perhaps the most powerful aspect. The file generated by Lisa is not just an input, but a **stable baseline** for an entire work session with the LLM.
+
+This transforms a simple chat into a true **stateful refactoring session**. The entire conversation with the model becomes a living "patch" virtually applied to the original source code you provided.
+
+Consider this workflow:
+
+1.  **You**: "*Here is the code for my backend.*" (you upload the file generated by Lisa).
+2.  **LLM**: "*Okay, I have analyzed the entire backend. What do you want to do?*"
+3.  **You**: "*In the `UserManager` class, rewrite the `get_user` function to be asynchronous.*"
+4.  **LLM**: "*Done. Here is the new asynchronous function. I noticed that this will also require a change in the controller that calls it.*"
+5.  **You**: "*Excellent observation. Show me how to update the controller as well, taking into account the change we just discussed.*"
+
+In this dialogue, the LLM is not reloading the context with every question. It is maintaining the state of the requested changes and reasoning incrementally on the stable baseline you provided at the beginning. It becomes a refactoring partner aware of the conversation's evolution.
+
+In summary, Hyperlisa is not a copilot, it is your **control console**. It puts you in the driver's seat, giving you total control over the context for deep analysis, complex refactoring, and targeted interactions with the most advanced language models.
+
+## 4\. Detailed Installation and Configuration
+
+This section will guide you step-by-step through installing Lisa and configuring your work environment, whether you are starting from scratch or updating an existing project.
+
+### 4.1. Prerequisites
+
+Before you begin, make sure you have on your system:
+
+  * Python 3.6 or higher.
+  * A code editor like Visual Studio Code.
+  * Access to a terminal or command prompt.
+
+### 4.2. Package Installation
+
+Lisa is installed via `pip`, the standard Python package manager. Open the terminal in the root folder of your project and type:
+
+```bash
+pip install hyperlisa
 ```
 
-This command should show a series of messages like these:
+This command will install the latest version of Lisa and make its commands available in your environment.
+
+### 4.3. Project Configuration
+
+Once the package is installed, you need to configure your project. The scenario differs depending on whether you are a new user or are updating from a previous version.
+
+#### 4.3.1. Scenario 1: New Project (`hyperlisa-configure`)
+
+If you are starting a new project with Lisa, the setup is immediate. Run this command:
+
+```bash
+hyperlisa-configure
 ```
-Configuring HyperLisa...
-✓ Creating configuration directory
-✓ Generating default configuration file
-✓ Setting permissions
-Configuration completed successfully!
+
+This command performs the following operations:
+
+1.  **Creates a hidden `.hyperlisa` folder** in your project's root.
+2.  **Copies a sample `config.yaml` file** into it. This file contains a complete and commented default configuration, ready to be customized.
+3.  **Updates the `.gitignore` file**, if present, to ensure that the `.hyperlisa` folder is ignored by version control.
+
+#### 4.3.2. Scenario 2: Migrating an Existing Project (`hyperlisa-migrate`)
+
+If you were already using Lisa (v1.x) on a project, after updating the package with `pip install --upgrade hyperlisa`, you need to run the migration command once:
+
+```bash
+hyperlisa-migrate
 ```
 
-The configuration command performs the following operations:
-1. Creates Lisa's configuration directory:
-   - Windows: `C:\Users\<username>\AppData\Local\hyperlisa\`
-   - Linux/MacOS: `~/.config/hyperlisa/`
-2. Generates the default configuration file `combine_config.yaml` in the created directory
-3. Sets the correct permissions for files and directories:
-   - Windows: read and write permissions for the current user
-   - Linux/MacOS: 755 permissions for directories and 644 for files
+This automated tool will take care of:
 
-If you run the command and see permission-related errors:
-- **Windows**: Run Command Prompt or PowerShell as administrator
-- **Linux/MacOS**: Use `sudo hyperlisa-configure` (you'll be asked for your password)
+1.  **Renaming** the old `hyperlisa` configuration folder to `.hyperlisa`.
+2.  **Updating** the `.gitignore` with the new folder name.
+3.  **Reading** your old configuration file and **converting** it to the new format, creating a default profile named `migrated_default` and backing up the old file.
 
-> **IMPORTANT**: 
-> - This command should be run only once after installation
-> - If run again, the command will first check for existing configuration:
->   - If it finds existing configuration, it will ask for confirmation before overwriting
->   - In case of overwrite, previous customizations will be lost
->   - If you want to keep customizations, make a backup copy of the `combine_config.yaml` file before running the command again
+### 4.4. Structure of the Configuration File (`.hyperlisa/config.yaml`)
 
-### 4. Configuration File
-The `combine_config.yaml` file allows you to customize which files to include or exclude from the analysis. The default configuration is:
+The heart of Lisa's flexibility lies in its configuration file. The new structure gives you granular control over what to include and how to generate the analysis dossiers.
+
+#### 4.4.1. Overview
+
+The file is organized into main sections:
+
+  * `log_level`: Sets the level of detail for messages during execution (e.g., `INFO`, `DEBUG`).
+  * `variables`: An area where you can define YAML anchors to reuse lists and values.
+  * `global_excludes`: A list of files and folders to be ignored *always*, in every profile.
+  * `profiles`: The main section where you define your analysis profiles.
+
+#### 4.4.2. The `global_excludes` section and Matching Logic
+
+Here you can list everything you never want to see in your analysis files. The logic for distinguishing files and folders is strict:
+
+  * A pattern that **ends with `/`** (e.g., `__pycache__/`) is considered **exclusively a folder**.
+  * A pattern that **does not end with `/`** (e.g., `*.log`) is considered **exclusively a file**.
+
+#### 4.4.3. The `variables` section
+
+To avoid repetition, you can use YAML anchors. For example:
 
 ```yaml
-# Inclusion patterns (extensions or directories to include)
-includes:
-  - "*.py"  
-  # You can add other extensions or directories
+variables:
+  PYTHON_FILES: &py_files ["*.py"]
 
-# Exclusion patterns (directories or files to exclude)
-excludes:
-  - ".git"
-  - "__pycache__"
-  - "*.egg-info"
-  - "venv*"
-  - ".vscode"
-  - "agents*"
-  - "log"
+...
+# in a profile
+includes: *py_files
 ```
 
-#### Inclusion/Exclusion Patterns
-- Patterns in `includes` determine which files will be processed (e.g., "*.py" includes all Python files)
-- Patterns in `excludes` specify which files or directories to ignore
-- You can use the * character as a wildcard
-- Patterns are applied to both file names and directory paths
-- **Important**: Exclusion rules always take priority over inclusion rules
+#### 4.4.4. The `profiles` section
 
-#### Pattern Examples
-```
-Example 1:
-C:\projects\my_project    # Windows
-/projects/my_project      # Linux/MacOS
-    /src_code
-        /utils
-            /logs
-                file1.py
-                file2.py
-            helpers.py
-```
-If we have these rules:
-- includes: ["*.py"]
-- excludes: ["*logs"]
+This section contains two elements:
 
-In this case, `file1.py` and `file2.py` will NOT be included despite having the .py extension because they are in a directory that matches the "*logs" exclusion pattern. The `helpers.py` file will be included.
+  * `name_template`: A template to define how output files will be named. It uses the placeholders `$n` (project name), `$p` (profile name), and `$ts` (timestamp).
+  * `profiles_list`: The actual list of your analysis profiles.
 
-```
-Example 2:
-C:\projects\my_project    # Windows
-/projects/my_project      # Linux/MacOS
-    /includes_dir
-        /excluded_subdir
-            important.py
-```
-If we have these rules:
-- includes: ["includes_dir"]
-- excludes: ["*excluded*"]
+#### 4.4.5. Profile Details
 
-In this case, `important.py` will NOT be included because it's in a directory that matches an exclusion pattern, even though its parent directory matches an inclusion pattern.
+Each profile in the `profiles_list` is an object with three keys:
 
-## Usage
+  * `name`: A descriptive name for the profile (e.g., `backend`, `frontend`).
+  * `enable`: A boolean (`true`/`false`) to activate or deactivate the profile without having to delete it.
+  * `blocks`: A list of analysis rule "blocks".
 
-The program can be run using one of the following commands from the terminal:
+#### 4.4.6. Block Details
 
-```bash
-# Windows
-C:\projects\my_project> cmb [options]
+Each block defines a set of rules to be applied to one or more paths:
 
-# Linux/MacOS
-user@computer:~/projects/my_project$ cmb [options]
+  * `paths`: A list of objects specifying the paths to be analyzed.
+  * `includes`: A list of patterns for files to include in those paths.
+  * `excludes`: A list of patterns for files/folders to exclude specifically for those paths.
+
+#### 4.4.7. Depth control (`depth`)
+
+Within `paths`, each object defines the path and the scanning depth:
+
+```yaml
+paths:
+  - { path: "/app/services/", depth: 0 }
+  - { path: "/app/utils/", depth: "*" }
 ```
 
-Alternative commands are also available:
-- `combine-code`: complete original command
-- `lisacmb`: descriptive alias
-- `hyperlisacmb`: even more descriptive alias
+  * `depth: 0`: Analyzes only the files present in the specified folder, without entering subfolders.
+  * `depth: N` (e.g., `1`, `2`, ...): Analyzes up to N levels deep.
+  * `depth: "*"`: Analyzes without depth limits (full recursive scan).
 
-### Default Structure and Name
-To understand which filename will be used by default, consider this structure:
+#### 4.4.8. Example of a complete `config.yaml` file
+
+```yaml
+# Hyperlisa v2.1 Configuration File
+log_level: INFO
+
+variables:
+  PYTHON_EXT: &py_files ["*.py"]
+  FRONTEND_EXT: &web_files ["*.css", "*.js", "*.html"]
+
+global_excludes:
+  - "__pycache__/"
+  - ".vscode/"
+  - ".git/"
+  - "venv/"
+  - ".hyperlisa/"
+
+profiles:
+  name_template: "$n_$p_$ts"
+  profiles_list:
+    - name: "backend"
+      enable: true
+      blocks:
+        - paths: 
+            - { path: "/app/", depth: "*" }
+          includes: *py_files
+          excludes:
+            - "static/"
+            - "tests/"
+    - name: "frontend_shallow"
+      enable: true
+      blocks:
+        - paths:
+            - { path: "/app/static/", depth: 0 }
+          includes: *web_files
+          excludes:
+            - "svg/"
+```
+
+## 5\. Advanced Usage (CLI)
+
+Once you have fine-tuned your `config.yaml` file, interacting with Lisa from the terminal is a simple and powerful operation. The Command-Line Interface (CLI) gives you the flexibility to generate analysis dossiers exactly as you need them, depending on the context and your goals.
+
+### 5.1. Summary of Commands
+
+All commands should be run from the root folder of your project.
+
+  * **`cmb`**
+    This is the default command, the most common one. Without any arguments, Lisa will scan your `config.yaml`, identify **all enabled profiles** (`enable: true`), and generate a separate text file for each of them. It's the perfect way to create different "views" of your project in one go.
+
+  * **`cmb <profile_name>`**
+    When you need a specific analysis, this is the command for you. Replace `<profile_name>` with the exact `name` of one of the profiles defined in your `config.yaml`. Lisa will ignore all others and process only the requested one, generating a single output file. It's ideal for quickly iterating on a targeted set of files.
+
+  * **`cmb --merge-all`**
+    This command is designed to create the "ultimate dossier." Lisa will process all enabled profiles, just like the default command, but instead of creating separate files, it will **merge all the collected code into a single, large text file**. It's the perfect solution when you want to give an LLM the most complete possible view of the entire system you've configured, without subdivisions.
+
+### 5.2. Output Management
+
+Understanding where the generated files end up and how they are named is crucial.
+
+  * **File Location**
+    To keep your project's main folder clean and tidy, **all text files generated by Lisa are saved inside the `.hyperlisa` folder**.
+
+  * **File Naming**
+    The name of each file is dynamically constructed following the rule defined in the `name_template` within your `config.yaml`. This template uses special placeholders:
+
+      * `$n`: Will be replaced with the **project name** (the name of the root folder, in uppercase).
+      * `$p`: Will be replaced with the **profile name** (`name`) that generated the file.
+      * `$ts`: Will be replaced with the **timestamp** (date and time) of the file's generation.
+
+    For example, with a template like `"$n-$p_$ts"`, running the `backend` profile on the `MY-PROJECT` project could result in a file named `MY-PROJECT-backend_20250620_2300.txt`.
+
+    When using `--merge-all`, the `$p` placeholder is simply ignored, producing a generic filename like `MY-PROJECT_20250620_2300.txt`.
+
+### 5.3. Additional Options
+
+You can add the following optional flags to any `cmb` command to modify its behavior:
+
+  * **`--notree`**
+    Use this flag to suppress the generation of the tree structure at the beginning of the output file. It's useful when you want a leaner dossier or when the structure context is not necessary. Example: `cmb --merge-all --notree`.
+
+  * **`--clean`**
+    Before running the generation, this command will search for and delete all previously created analysis files (`.txt`) in the `.hyperlisa` folder. You will be asked for confirmation before deletion. It's perfect for cleaning up before a new analysis. Example: `cmb --clean`.
+
+
+    ## 6\. Using the Generated File with LLMs
+
+The text file generated by Lisa is the key to unlocking a deep and interactive code analysis with any modern Large Language Model (LLM), such as ChatGPT, Claude, or Gemini. By uploading this comprehensive "dossier," you provide the model with an unprecedented overview, allowing it to reason about the architecture, dependencies, and complex logic of your project.
+
+### 6.1. Advantages of This Approach
+
+  * **Access to the Latest Features**: The LLM can analyze the most recent code, even if it has not yet been documented, giving you an advantage in understanding emerging APIs.
+  * **Deep Understanding**: Having access to the complete and structured source code, the artificial intelligence can offer much more precise and contextualized suggestions than when analyzing isolated snippets.
+  * **Effective Debugging**: If you encounter a problem, you can ask the LLM to analyze specific implementations and their interactions to help you identify the root cause.
+  * **Informed Customization**: You can create custom solutions based on the actual internal implementations of the library you are studying, not just its public APIs.
+  * **Immediate Architectural Context**: Thanks to the tree structure inserted at the beginning of the file, the LLM immediately has a complete map of the project, leading to faster understanding and more accurate high-level responses.
+
+### 6.2. Prompt Examples
+
+Once you have uploaded the `.txt` file generated by Lisa into the chat of your favorite LLM, you can start asking questions. Here are some examples, from general to specific.
+
+**Starting Prompt (to begin the session)**
 
 ```
-# Windows
-C:\projects
-    \my_test_project     <- This is the root directory
-        \src
-            main.py
-        \tests
-            test_main.py
-
-# Linux/MacOS
-/home/user/projects
-    /my_test_project     <- This is the root directory
-        /src
-            main.py
-        /tests
-            test_main.py
+I have generated a complete analysis of this project's source code using Hyperlisa. The file I have provided contains the full structure and all the necessary references. Now, please analyze the code structure and prepare to answer my questions.
 ```
 
-In this case, the default name will be "MY_TEST_PROJECT" (the root directory name in uppercase).
+**For Architectural Analysis**
 
-### Available parameters:
+```
+1. Based on the tree structure you see at the beginning of the file, describe the general architecture of this project.
+2. Identify the main modules and draw me a diagram (in Mermaid or PlantUML format) showing their dependencies.
+3. Based on the code, what is the best way to implement [describe your use case]?
+```
 
-- `--clean`: Removes previously generated text files
-- `--output NAME`: Specifies the output file name prefix
-  ```bash
-  # Windows
-  # Example with default name
-  C:\projects\my_project> cmb
-  # Output: MY_PROJECT_20240327_1423.txt
+**To Understand Existing Features**
 
-  # Example with custom name
-  C:\projects\my_project> cmb --output PROJECT_ANALYSIS
-  # Output: PROJECT_ANALYSIS_20240327_1423.txt
+```
+Analyze how this project implements memory management in conversations. I want to understand how it optimizes token usage. Can you explain the logic and provide me with an implementation example based on the current code?
+```
 
-  # Linux/MacOS
-  # Example with default name
-  user@computer:~/projects/my_project$ cmb
-  # Output: MY_PROJECT_20240327_1423.txt
+**To Implement New Features**
 
-  # Example with custom name
-  user@computer:~/projects/my_project$ cmb --output PROJECT_ANALYSIS
-  # Output: PROJECT_ANALYSIS_20240327_1423.txt
-  ```
+```
+Based on the provided source code, help me create a custom agent that:
+1. Accesses a SQL database.
+2. Processes natural language queries.
+3. Generates and executes the appropriate SQL queries.
+4. Formats the results in a user-readable way.
+Show me the necessary code, using the most suitable components you find in the project.
+```
 
-### Output
+**For Refactoring**
 
-The script generates a text file with the format:
-`NAME_YYYYMMDD_HHMM.txt`
+```
+I need to rename the class `OldClassName` to `NewClassName`. Analyze the entire code I have provided and list, file by file, all the places I will need to modify to complete this refactoring.
+```
 
-where:
-- `NAME` is the prefix specified with --output or the default one
-- `YYYYMMDD_HHMM` is the generation timestamp
+### 6.3. Tips for Effective Use
 
-## Usage with GitHub Projects
+To get the most out of your analysis sessions, keep these tips in mind:
 
-To use Lisa with a GitHub project, follow these steps:
+1.  **Be Specific**: Clearly describe your goal and the features you want to achieve.
+2.  **Ask for Explanations**: If a suggestion is not clear, ask the LLM to explain the internal workings of that part of the code.
+3.  **Iterate**: Use the LLM's answers as a starting point to refine your questions and arrive at better solutions.
+4.  **Always Verify**: Test the code generated by the artificial intelligence and ask for clarification if you encounter errors.
+5.  **Explore Alternatives**: Ask the LLM to propose different approaches to solve the same problem, always based on the provided source code.
 
-1. **Environment preparation**:
-   ```bash
-   # Windows
-   C:> mkdir C:\projects
-   C:> cd C:\projects
+## 7\. Contributing to the Project
 
-   # Linux/MacOS
-   $ mkdir ~/projects
-   $ cd ~/projects
-   ```
+Lisa is an open project and every contribution is more than welcome. If you like the idea and want to help improve it, there are many ways to participate:
 
-2. **Clone the project to analyze**:
-   ```bash
-   # Example with a hypothetical "moon_project"
-   # Windows/Linux/MacOS
-   git clone https://github.com/user/moon_project.git
-   ```
+  * Open issues to report bugs or propose new features.
+  * Propose pull requests with improvements or corrections.
+  * Improve the documentation to make it even clearer and more complete.
+  * Share your use cases, your suggestions, and the most interesting analysis dossiers you have created.
 
-3. **Install and configure Lisa**:
-   ```bash
-   # Windows/Linux/MacOS
-   pip install hyperlisa
-   hyperlisa-configure
-   ```
+## 8\. License
 
-4. **Run the analysis**:
-   ```bash
-   # Windows
-   C:\projects\moon_project> cmb
-
-   # Linux/MacOS
-   user@computer:~/projects/moon_project$ cmb
-   ```
-
-### Best Practices for Analysis
-- Before running Lisa, make sure you're in the root directory of the project to analyze
-- Check and customize the `combine_config.yaml` file according to the specific needs of the project
-- Use the `--clean` option to keep the directory tidy when generating multiple versions
-
-## Additional Notes
-
-- Lisa maintains the hierarchical structure of files in the generated document
-- Each file is clearly delimited by separators indicating its relative path
-- Code is organized maintaining directory depth order
-- Generated files can be easily shared with LLMs for analysis
-
-## Using the Generated File with LLMs
-
-Lisa generates a file that can be effectively used with various Large Language Models. Here's a practical example of how to make the most of this tool.
-
-### Example: Analyzing LangChain
-Let's say we want to use the LangChain library but aren't familiar with its structure or its most recent features.
-
-1. **Preparation**:
-   ```bash
-   # Clone LangChain
-   git clone https://github.com/langchain-ai/langchain.git
-   cd langchain
-
-   # Generate the analysis file with Lisa
-   cmb --output LANGCHAIN_ANALYSIS
-   ```
-
-2. **Using with ChatGPT/Claude**:
-   Upload the generated file `LANGCHAIN_ANALYSIS_20240327_1423.txt` to the chat. You can use prompts like these:
-
-   ```
-   I've generated a source code analysis of LangChain using Lisa.
-   The file contains the complete code structure with all references.
-   Please:
-   1. Analyze the code structure
-   2. Identify the main modules
-   3. Suggest the best way to implement [describe your use case]
-   ```
-
-   Specific prompt examples:
-
-   **To explore recent features**:
-   ```
-   In the code I've provided, look for the most recent implementations
-   for OpenAI model integration. I want to create a chain that uses 
-   GPT-4 to analyze PDF documents, extracting key information and 
-   generating a summary. Can you show me the necessary code using 
-   the latest available APIs?
-   ```
-
-   **To understand specific parts**:
-   ```
-   Analyze how LangChain implements memory management in conversations. 
-   I want to create a chatbot that maintains context from previous 
-   conversations but optimizes token usage. Can you explain how it 
-   works and provide an implementation example based on the current code?
-   ```
-
-   **For custom projects**:
-   ```
-   Based on the provided source code, help me create a custom agent that:
-   1. Accesses a SQL database
-   2. Processes natural language queries
-   3. Generates and executes appropriate SQL queries
-   4. Formats results in a user-friendly way
-   Show me the necessary code using the most suitable LangChain 
-   components.
-   ```
-
-### Advantages of This Approach
-- **Access to Latest Features**: The LLM can see the most recent code, even if not yet documented
-- **Deep Understanding**: Having access to the complete source code, the LLM can provide more accurate and contextualized suggestions
-- **Effective Debugging**: If you encounter issues, you can ask the LLM to analyze specific implementations
-- **Informed Customization**: You can create custom solutions based on actual internal implementations
-
-### Tips for Effective Use
-1. **Be Specific**: Clearly describe your use case and desired functionality
-2. **Ask for Explanations**: If something isn't clear, ask questions about internal workings
-3. **Iterate**: Use the LLM's responses to refine your questions and get better solutions
-4. **Verify**: Always test generated code and ask for clarification if needed
-5. **Explore Alternatives**: Ask the LLM to suggest different approaches based on the source code
-
-## Contributing
-
-If you want to contribute to the project, you can:
-- Open issues to report bugs or propose improvements
-- Submit pull requests with new features
-- Improve documentation
-- Share your use cases and suggestions
-
-## License
-
-MIT License
+The project is released under the MIT license.
 
 Copyright (c) 2024
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
