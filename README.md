@@ -1,4 +1,4 @@
-[English](README.md) | [Italiano](https://www.google.com/search?q=README.it.md)
+[English] | [Italiano](README.it.md)
 
 # Lisa - Code Analyzer for LLMs
 
